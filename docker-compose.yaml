@@ -1,0 +1,38 @@
+version: '3'
+services:
+  nginx:
+   container_name: m-nginx
+   image: nginx:1.13
+   restart: always
+   ports:
+   - 80:80
+   - 443:443
+   volumes:
+   - ./nginx/conf.d:/etc/nginx/conf.d
+    
+  mysql:
+   container_name: m-mysql
+   image: mysql/mysql-server:5.7
+   environment:
+    MYSQL_DATABASE: moviesys
+    MYSQL_ROOT_PASSWORD: MyNewPass4!
+    MYSQL_ROOT_HOST: '%'
+   ports:
+   - "3307:3306"
+   restart: always
+
+  app:
+    restart: always
+    build: ../moviesys
+    working_dir: /moviesys
+    volumes:
+      - ../moviesys:/moviesys
+      - ~/.m2:/root/.m2
+      - ~/movie/img:/movie/img
+      - /usr/java/jdk1.8.0_191/jre/lib/security/java.security:/docker-java-home/jre/lib/security/java.security
+    expose:
+      - "8080"
+    depends_on:
+      - nginx
+      - mysql
+    command: mvn spring-boot:run -Dspring-boot.run.profiles=docker

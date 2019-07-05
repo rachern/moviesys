@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>MovieDetail</title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+      <script src="js/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+		.daum_table{
+			margin-top: 80px;
+		}
+		tr{
+			height: 30px;
+		}
+		.daum-row{
+			margin-top: 10px;
+    		margin-left: 10%;
+    		margin-right: 10%;
+    	}
+    	.daum_hail{
+    		border: 1px solid black;
+    		text-align: center;
+    	}
+    	.rows{
+    		padding: 5px 10px;
+    	}
+    	.rows a,.rows span{
+    		width: 30px;
+    		height: 30px;
+    		margin: 0 10px;
+    		border: 1px solid black;
+    		text-align: center;
+    		line-height: 30px;
+    		float: left;
+    	}
+    	.button button{
+    		margin: 10px 10px;
+    		width: 100px;
+    	}
+    </style>
+  </head>
+  <body>
+  	<!-- 导航条 -->
+  	<nav class="navbar navbar-inverse navbar-fixed-top">
+		  <div class="container">
+		    <div class="navbar-header">
+		      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+		        <span class="sr-only">Toggle navigation</span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		      </button>
+		      <a class="navbar-brand" href="#">影院管理系统</a>
+		    </div>
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		      <ul class="nav navbar-nav">
+		      	<li><a href="/managerIndex.html">首页</a></li>
+		        <li><a href="/MoviehallList.html">影厅信息 </a></li>
+		        <li class="active"><a href="/MovieList.html">影片信息</a></li>
+		        <li><a href="/TicketList.html">影票信息 </a></li>
+		        <li><a href="/CheckReport.html">查看汇报</a></li>
+		        <li><a href="/changeCinemaName.html">修改影院</a></li>
+				  <li><a href="/logout">登出</a></li>
+		      </ul>
+		    </div>
+		  </div>
+		</nav>
+	
+	<!-- 影厅列表 -->
+	<div class="container daum_table" align="center">
+		<form id="movie">
+		<table width="80%">
+			<h2>影片信息</h2>
+			<tr>
+				<td align="right" width="40%">影片名称：</td>
+				<td><input id="movieName" name="movieName" type="text" style="width: 60%;"/></td>
+			</tr>
+			<tr>
+				<td align="right">影片时长：</td>
+				<td><input id="runningTime" name="runningTime" type="text" style="width: 60%;"/></td>
+			</tr>
+			<tr>
+				<td align="right">上映时间：</td>
+				<td><input id="releaseTime" name="releaseTime" type="text" style="width: 60%;"/><span>&nbsp;&nbsp;2019-01-10</span></td>
+			</tr>
+			<tr>
+				<td align="right">剧情简介：</td>
+				<td><textarea id="movieDescribe" name="movieDescribe" rows="5" cols="43"></textarea></td>
+			</tr>
+			<tr>
+				<td align="right">电影海报：</td>
+				<td><input id="file" name="file" type="file" style="width: 60%;"/></td>
+			</tr>
+		</table>
+		</form>
+	</div>
+	<div class="button" align="center">
+		<button id="btn">确定</button>
+		<button onclick="javascript:history.back(-1);">取消</button>
+	</div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+    	 movieId = GetQueryString("id");
+				// var server = "http://47.106.247.251";
+				var server = "";
+    if(movieId != null){
+    	$(document).ready(function () {
+    		requestUrl = server + "/movie/"+movieId;
+	        $.ajax({
+	            type:"get",
+	            url: requestUrl,
+	            dataType:"json",
+	            async:true,
+	            success:function(result){
+	            	console.log(result);
+	            	document.getElementById('movieName').value = result.movieName;
+	            	document.getElementById('runningTime').value = result.runningTime;
+	            	document.getElementById('releaseTime').value = result.releaseTime;
+	            	document.getElementById('movieDescribe').value = result.movieDescribe;
+	            	/*var str = $('#hail').html();*/
+	            	/*for(var i=1;i<=result.screensSeatList.length;i++){
+	            		str += '<div class="rows" id="'+i+'"><span>'+i+'</span>';
+	            		for(var j=1;j<=result.screensSeatList[i-1].rowNumber;j++){
+	            			str += '<a href="javascript:;"></a>';
+	            		}
+	            		str += '座位数：<input type="text" value="'+result.screensSeatList[i-1].rowNumber+'" onchange = "changeCol(this);"/></div><br />';
+	            	}
+	            	$('#hail').html(str);*/
+	            }
+	        });
+    	});
+    		/*var arr = [];*/
+    	 	document.getElementById('btn').onclick = function(){
+    	 		var MovieData = new FormData(document.getElementById("movie"));
+	        $.ajax({
+	            type:"post",
+	            url: server+"/movie/update",
+	            processData: false,
+							contentType : false,
+	            dataType:"json",
+	            async:true,
+	            data:MovieData,
+	            success:function(result){
+	            		alert("修改成功");
+	            		window.location.href="/MovieList.html";
+	            }
+	        });
+	        
+	        	/*for(var i=1;i<=document.getElementById('row').value;i++){
+	        		arr.push({
+		        				"columnNumber":i,
+		        				"rowNumber":parseInt(document.getElementById(i).getElementsByTagName('input')[0].value),
+		        		});
+	        	}
+	        	
+	        	data1 = JSON.stringify(
+	        		{
+		        		"screensId":screensId,
+		        		"screensName":document.getElementById('screensName').value,
+		        		"screensSeatList":arr
+	        		}
+	        	);
+	        	
+		        $.ajax({
+	            type:"post",
+	            url: server + "/Screens/update",
+	            contentType:'application/json',
+	            dataType:"json",
+	            async:true,
+	            data:data1,
+	            success:function(result){
+	                console.log(result);
+	            }
+	         });*/
+	       }
+    }else{
+    	document.getElementById('btn').onclick = function(){
+    		var MovieData = new FormData(document.getElementById("movie"));
+	        $.ajax({
+	            type:"post",
+	            url: server+"/movie",
+	            processData: false,
+							contentType : false,
+	            dataType:"json",
+	            async:true,
+	            data:MovieData,
+	            success:function(result){
+	            		alert("添加成功");
+					window.location.href="/MovieList.html";
+	            }
+	        });
+	        
+	        	/*for(var i=1;i<=document.getElementById('row').value;i++){
+	        		arr.push({
+		        				"columnNumber":i,
+		        				"rowNumber":parseInt(document.getElementById(i).getElementsByTagName('input')[0].value),
+		        		});
+	        	}
+	        	
+	        	data1 = JSON.stringify(
+	        		{
+		        		"screensId":screensId,
+		        		"screensName":document.getElementById('screensName').value,
+		        		"screensSeatList":arr
+	        		}
+	        	);
+	        	
+		        $.ajax({
+	            type:"post",
+	            url: requestUrl,
+	            contentType:'application/json',
+	            dataType:"json",
+	            async:true,
+	            data:data1,
+	            success:function(result){
+	                console.log(result);
+	            }
+	         });*/
+    		}
+    }
+    	/**
+			 * url参数获取函数
+			 * @param name
+			 * @returns {null}
+			 * @constructor
+			 */
+				function GetQueryString(name)
+				{
+				    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+				    var r = window.location.search.substr(1).match(reg);
+				    if(r!=null)return  unescape(r[2]); return null;
+				}
+		// var server = "http://47.106.247.251";
+		/*var server = "";
+    	requestUrl = server + "/movie";
+    	
+    	
+    	function a() {
+    		var MovieData = new FormData(document.getElementById("movie"));
+        $.ajax({
+            type:"post",
+            url: requestUrl,
+            processData: false,
+						contentType : false,
+            dataType:"json",
+            async:true,
+            data:MovieData,
+            success:function(result){
+            	if(result.code != "200"){
+            		alert(result.msg)
+            	}else{
+            			alert("yes")
+            	}
+                console.log(result);
+            }
+        });
+    }*/
+    </script>
+  </body>
+</html>

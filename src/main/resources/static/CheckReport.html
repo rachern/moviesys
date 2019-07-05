@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>CheckReport</title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+      <script src="js/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+    	.daum_table{
+    		margin-top: 50px;
+    	}
+    	td,th{
+    		text-align: center;
+    		border: 1px solid;
+    	}
+    	th{
+    		font-size: 20px;
+    	}
+    	td{
+    		font-size: 18px;
+    	}
+    </style>
+  </head>
+  <body>
+  	<!-- 导航条 -->
+  	<nav class="navbar navbar-inverse navbar-fixed-top">
+		  <div class="container">
+		    <div class="navbar-header">
+		      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+		        <span class="sr-only">Toggle navigation</span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		      </button>
+		      <a class="navbar-brand" href="#">影院管理系统</a>
+		    </div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		      <ul class="nav navbar-nav">
+		      	<li><a href="/managerIndex.html">首页</a></li>
+		        <li><a href="/MoviehallList.html">影厅信息 </a></li>
+		        <li><a href="/MovieList.html">影片信息</a></li>
+		        <li><a href="/TicketList.html">影票信息 </a></li>
+		        <li class="active"><a href="/CheckReport.html">查看汇报</a></li>
+		        <li><a href="/changeCinemaName.html">修改影院</a></li>
+				  <li><a href="/logout">登出</a></li>
+		      </ul>
+		    </div>
+		  </div>
+		</nav>
+	
+	<!-- 影厅列表 -->
+	<div class="container daum_table" align="center">
+		<h2>查看汇报</h2>
+		<table class="table" style="width: 80%;" id="table">
+			<tr>
+				<th>影片名称</th>
+				<th>反馈时间</th>
+			</tr>
+		</table>
+		<button class="btn btn-success" onclick="window.location.href='/managerIndex.html'">返回</button>
+	</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+    	$(document).ready(function () {
+
+			// var server = "http://47.106.247.251";
+			var server = "";
+    	requestUrl = server + "/feedback";
+    
+        $.ajax({
+            type:"get",
+            url: requestUrl,
+            contentType:'application/x-www-form-urlencoded',
+            dataType:"json",
+            async:true,
+            success:function(result){
+            	console.log(result);
+            	var str = $('#table').html();
+            	for(var i=0;i<result.length;i++){
+            		str += '<tr><td>'+result[i].feedbackContent+'</td><td>'+result[i].feedbackTime+'</td></tr>';
+            	}
+            	$('#table').html(str);
+            }
+        });
+    	});
+    	
+    </script>
+  </body>
+</html>

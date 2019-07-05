@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>register</title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+      <script src="js/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+    	html{
+    		height: 100%;
+    	}
+    	body{
+    		background: url(img/2.jpg);
+    		background-size: 100% 100%;
+    	}
+    	.marTo{
+    		margin-top: 100px;
+    	}
+    	.bor{
+    		border: 1px solid floralwhite;
+    		border-radius: 10px;
+    	}
+    	.fo{
+    		margin: 10px 10px;
+    	}
+    	.font{
+    		color: floralwhite;
+    		font-size: 24px;
+    	}
+    	.head{
+    		margin-left: 30px;
+    		font-size: 50px;
+    	}
+    </style>
+  </head>
+  <body>
+  	<div class="container">
+  		<h1 class="font head"><strong>影院管理系统</strong></h1>
+  		<div class="row">
+  			<div class="col-md-4 col-md-push-4 marTo bor">
+				  <div class="form-group">
+				    <label class="exampleInputEmail1 font">账号</label>
+				    <input type="text" name="username" class="form-control" id="exampleInputEmail1" placeholder="Account">
+				  </div>
+				  <div class="form-group">
+				    <label class="exampleInputPassword1 font">创建密码</label>
+				    <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+				  </div>
+				   <div class="form-group">
+				    <label class="exampleInputPassword1 font">确认密码</label>
+				    <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Repeat the Password">
+				  </div>
+				   <div class="form-group">
+				    <label class="exampleInputPassword1 font">手机号码</label>
+				    <input type="password" name="phone" class="form-control" id="exampleInputPassword3" placeholder="Phone">
+				  </div>
+				  <p class="text-center"><button onclick="a()" class="btn btn-primary btn-lg">注册</button></p>
+  			</div>
+  		</div>
+  	</div>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+    	// var server = "http://47.106.247.251";
+		var server ="";
+		requestUrl = server + "/signin";
+    	function a() {
+
+			if (document.getElementById("exampleInputEmail1").value == "" ||
+					document.getElementById("exampleInputPassword1").value== "" ||
+					document.getElementById("exampleInputPassword3").value== "") {
+				alert("信息为空!")
+			}else {
+				if (document.getElementById("exampleInputPassword1").value == document.getElementById("exampleInputPassword2").value) {
+					$.ajax({
+						type: "post",
+						url: requestUrl,
+						contentType: 'application/x-www-form-urlencoded',
+						dataType: "json",
+						async: true,
+						data: {
+							username: document.getElementById("exampleInputEmail1").value,
+							password: document.getElementById("exampleInputPassword1").value,
+							phone: document.getElementById("exampleInputPassword3").value
+						},
+						success: function (result) {
+							if (result.code != "200") {
+								alert(result.msg)
+							} else {
+								alert("注册成功!");
+								window.location.href = "/login.html"
+							}
+							console.log(result);
+						}
+					});
+				} else {
+					alert("两次密码不相同!");
+				}
+			}
+    }
+    </script>
+  </body>
+</html>

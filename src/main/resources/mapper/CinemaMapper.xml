@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="team.csjr.moviesys.mapper.CinemaMapper" >
+  <resultMap id="BaseResultMap" type="team.csjr.moviesys.entity.Cinema" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="cinema_id" property="cinemaId" jdbcType="BIGINT" />
+    <result column="cinema_name" property="cinemaName" jdbcType="VARCHAR" />
+  </resultMap>
+</mapper>

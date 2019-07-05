@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>managerIndex</title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+      <script src="js/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+    	.daum-thumbnail{
+    		margin-top: 100px;
+    		margin-bottom: 0;
+    	}
+    	p{
+    		font-size: 20px;
+    		float: left;
+    		position: absolute;
+    		bottom: 3%;
+    		left: 10%;
+    		color: white;
+    	}
+    	.img{
+    		width: 100%;
+    		overflow: hidden;
+    		height: 150px;
+    	}
+    	.img img{
+    		max-width: 100%;
+    		min-width: 100%;
+    		height: 150px;
+    	}
+    </style>
+  </head>
+  <body>
+  	<!-- 导航条 -->
+  	<nav class="navbar navbar-inverse navbar-fixed-top">
+	  <div class="container">
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+	        <span class="sr-only">Toggle navigation</span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	      <a class="navbar-brand" href="#">影院管理系统</a>
+	    </div>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	      <ul class="nav navbar-nav">
+	      	<li class="active"><a href="/managerIndex.html">首页</a></li>
+	        <li><a href="/MoviehallList.html">影厅信息 </a></li>
+	        <li><a href="/MovieList.html">影片信息</a></li>
+	        <li><a href="/TicketList.html">影票信息 </a></li>
+	        <li><a href="/CheckReport.html">查看汇报</a></li>
+	        <li><a href="/changeCinemaName.html">修改影院</a></li>
+			  <li><a href="/logout">登出</a></li>
+	      </ul>
+	    </div>
+	</nav>
+	
+	<!-- 电影展示 -->
+	<div class="container">
+		<div class="row" id="row">
+		
+		</div>
+	</div>
+	<!-- 分页 -->
+	<div class="container" align="center">
+		<nav aria-label="Page navigation" class="daum-paging">
+		  <ul class="pagination" id="pagination">
+		    <li class="disabled">
+		      <a href="#" aria-label="Previous" onclick="prev()">
+		        <span aria-hidden="true">&laquo;</span>
+		      </a>
+		    </li>
+		  </ul>
+		</nav>
+	</div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+    	var now;
+    	// var server = "http://47.106.247.251";
+		var server = "";
+    	requestUrl = server + "/movie";
+    	$(document).ready(function () {
+        $.ajax({
+            type:"get",
+            url: requestUrl,
+            contentType:'application/x-www-form-urlencoded',
+            dataType:"json",
+            async:true,
+            data:{
+            	pageSize: 8,
+            },
+            success:function(result){
+            	console.log(result);
+            	var str = $('#row').html();
+            	for(var i=0;i<result.data.length;i++){
+            		id = result.data[i].movieId;
+            		str += '<div class="col-xs-6 col-md-3"><a href="userBuy.html?id='+ id +'" class="thumbnail daum-thumbnail"><div class="img"><img src="'+result.data[i].movieIcon+'" class="img-responsive center-block" width="100%"></div></a><p><strong>'+result.data[i].movieName+'</strong></p></div>';
+            	}
+            	$('#row').html(str);
+            	var strs = $("#pagination").html();
+            	strs += '<li class="active"><a onclick="a(this)" >'+ 1 +'</a></li>';
+            	for(var i=1;i<result.totalPages;i++){
+            		strs += '<li class=""><a onclick="a(this)" >'+ (i+1) +'</a></li>';
+            	}
+            	strs += '<li class=""><a href="#" aria-label="Next" onclick="next()"><span aria-hidden="true">&raquo;</span></a></li>';
+            	$('#pagination').html(strs);
+            }
+        });
+        now = 1;
+    	});
+    	
+    	function a(pageNum){
+        $.ajax({
+            type:"get",
+            url: requestUrl,
+            contentType:'application/x-www-form-urlencoded',
+            dataType:"json",
+            async:true,
+            data:{
+            	pageNum: pageNum.innerHTML,
+            	pageSize: 8,
+            },
+            success:function(result){
+            	console.log(result);
+            	var str = "";
+            	for(var i=0;i<result.data.length;i++){
+            		id = result.data[i].movieId;
+            		str += '<div class="col-xs-6 col-md-3"><a href="userBuy.html?id='+ id +'" class="thumbnail daum-thumbnail"><div class="img"><img src="'+result.data[i].movieIcon+'" class="img-responsive center-block" width="100%"></div></a><p><strong>'+result.data[i].movieName+'</strong></p></div>';
+            	}
+            	$('#row').html(str);
+            	var s = document.getElementById('pagination').getElementsByTagName('li');
+            	for(var i=0;i<s.length;i++){
+            		s[i].className = "";
+            	}
+            	pageNum.parentNode.className += "active";
+            	if(pageNum.innerHTML == 1){
+            		s[0].className += "disabled";
+            	}else if(pageNum.innerHTML == s.length-2){
+            		s[s.length-1].className += "disabled";
+            	}
+            }
+        });
+        now = pageNum.innerHTML;
+    	}
+    	
+    	function prev(){
+    		$.ajax({
+            type:"get",
+            url: requestUrl,
+            contentType:'application/x-www-form-urlencoded',
+            dataType:"json",
+            async:true,
+            data:{
+            	pageNum: now - 1,
+            	pageSize: 8,
+            },
+            success:function(result){
+            	console.log(result);
+            	var str = "";
+            	for(var i=0;i<result.data.length;i++){
+            		id = result.data[i].movieId;
+            		str += '<div class="col-xs-6 col-md-3"><a href="userBuy.html?id='+ id +'" class="thumbnail daum-thumbnail"><div class="img"><img src="'+result.data[i].movieIcon+'" class="img-responsive center-block" width="100%"></div></a><p><strong>'+result.data[i].movieName+'</strong></p></div>';
+            	}
+            	$('#row').html(str);
+            	var s = document.getElementById('pagination').getElementsByTagName('li');
+            	for(var i=0;i<s.length;i++){
+            		s[i].className = "";
+            	}
+            	s[now-1].className += "active";
+            	if((now-1) == 1){
+            		s[0].className += "disabled";
+            	}
+            	now = now-1;
+            }
+       });
+    	}
+    	
+    	function next(){
+    		$.ajax({
+            type:"get",
+            url: requestUrl,
+            contentType:'application/x-www-form-urlencoded',
+            dataType:"json",
+            async:true,
+            data:{
+            	pageNum: now + 1,
+            	pageSize: 8,
+            },
+            success:function(result){
+            	console.log(result);
+            	var str = "";
+            	for(var i=0;i<result.data.length;i++){
+            		id = result.data[i].movieId;
+            		str += '<div class="col-xs-6 col-md-3"><a href="userBuy.html?id='+ id +'" class="thumbnail daum-thumbnail"><div class="img"><img src="'+result.data[i].movieIcon+'" class="img-responsive center-block" width="100%"></div></a><p><strong>'+result.data[i].movieName+'</strong></p></div>';
+            	}
+            	$('#row').html(str);
+            	var s = document.getElementById('pagination').getElementsByTagName('li');
+            	for(var i=0;i<s.length;i++){
+            		s[i].className = "";
+            	}
+            	s[now+1].className += "active";
+            	if((now+1) == s.length-2){
+            		s[s.length-1].className += "disabled";
+            	}
+            	now = now+1;
+            }
+       });
+    	}
+    </script>
+  </body>
+</html>

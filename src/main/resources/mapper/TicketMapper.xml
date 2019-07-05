@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="team.csjr.moviesys.mapper.TicketMapper" >
+  <resultMap id="BaseResultMap" type="team.csjr.moviesys.entity.Ticket" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ticket_id" property="ticketId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="ticket_status" property="ticketStatus" jdbcType="CHAR" />
+    <result column="screening_id" property="screeningId" jdbcType="BIGINT" />
+    <result column="screening_column" property="screeningColumn" jdbcType="INTEGER" />
+    <result column="screening_row" property="screeningRow" jdbcType="INTEGER" />
+  </resultMap>
+</mapper>

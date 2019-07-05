@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>Order</title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+      <script src="js/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+    	.daum-table{
+    		margin-top: 150px;
+    	}
+    	td,th{
+    		text-align: center;
+    	}
+    	th{
+    		font-size: 20px;
+    	}
+    	td{
+    		font-size: 18px;
+    	}
+    	td span{
+    		font-size: 13px;
+    	}
+    	.daum-row{
+    		text-align: right;
+    	}
+    	.pay{
+    		font-size: 20px;
+    		margin: 10px 10px;
+    	}
+    	font{
+    		font-size: 40px;
+    		color: red;
+    	}
+    </style>
+  </head>
+  <body>
+  	<!-- 导航条 -->
+  	<nav class="navbar navbar-inverse navbar-fixed-top">
+	  <div class="container">
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+	        <span class="sr-only">Toggle navigation</span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	      <a class="navbar-brand" href="#">影院管理系统</a>
+	    </div>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	      <ul class="nav navbar-nav">
+	        <li><a href="/userIndex.html">首页 <span class="sr-only">(current)</span></a></li>
+	        <li><a href="#">购票</a></li>
+	        <li><a href="/report.html">我想看</a></li>
+	        <li class="active"><a href="/Order.html">我的订单</a></li>
+			  <li><a href="/logout">登出</a></li>
+	      </ul>
+	    </div>
+	</nav>
+	
+	<!-- 订单 -->
+	<div class="container">
+		<div class="row">
+			<table class="table table-striped daum-table" id="table">
+			  <tr>
+			  	<th>影片</th>
+			  	<th>时间</th>
+			  	<th>放映厅</th>
+			  	<th>支付状态</th>
+			  </tr>
+			</table>
+		</div>
+	</div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+		// var server = "http://47.106.247.251";
+		var server = "";
+    	$(document).ready(function () {
+    		$.ajax({
+	            type:"get",
+	            url: server + "/ticket",
+	            contentType:'application/x-www-form-urlencoded',
+	            dataType:"json",
+	            async:true,
+	            success:function(result){
+	            	console.log(result);
+	            	var str = $("#table").html();
+	            	var status;
+	            	for(var i=0;i<result.data.length;i++){
+	            		if(result.data[i].ticketStatus == "0"){
+	            			status = '<a onclick="f('+result.data[i].ticketId+')">未支付</a>';
+	            		}else if(result.data[i].ticketStatus == "1"){
+	            			status = "已支付";
+	            		}
+	            		str += '<tr><td>'+result.data[i].screeningDTO.movie.movieName+'</span></td><td>'+result.data[i].screeningDTO.beginTime+'<br><span>'
+	            				+result.data[i].screeningDTO.endTime+'散场</span></td><td>'+result.data[i].screeningDTO.screens.screensName+'</td><td>'+status+'</td></tr>'
+	            	}
+	            	$("#table").html(str);
+	            }
+	        });
+    	});
+
+    	function f(id) {
+			document.cookie="id="+id;
+			window.location.href = "/pay.html";
+		}
+    </script>
+  </body>
+</html>

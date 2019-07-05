@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="team.csjr.moviesys.mapper.MovieMapper" >
+  <resultMap id="BaseResultMap" type="team.csjr.moviesys.entity.Movie" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="movie_id" property="movieId" jdbcType="BIGINT" />
+    <result column="movie_name" property="movieName" jdbcType="VARCHAR" />
+    <result column="release_time" property="releaseTime" jdbcType="TIMESTAMP" />
+    <result column="running_time" property="runningTime" jdbcType="VARCHAR" />
+    <result column="movie_icon" property="movieIcon" jdbcType="VARCHAR" />
+    <result column="movie_describe" property="movieDescribe" jdbcType="LONGVARCHAR" />
+  </resultMap>
+</mapper>

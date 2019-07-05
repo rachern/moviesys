@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>TicketInformation</title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+      <script src="js/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+		.daum_table{
+			margin-top: 80px;
+		}
+		tr{
+			height: 30px;
+		}
+		.daum-row{
+			margin-top: 10px;
+    		margin-left: 10%;
+    		margin-right: 10%;
+    	}
+    	.daum_hail{
+    		border: 1px solid black;
+    		text-align: center;
+    	}
+    	.rows{
+    		padding: 5px 10px;
+    	}
+    	.rows a,.rows span{
+    		width: 30px;
+    		height: 30px;
+    		margin: 0 10px;
+    		border: 1px solid black;
+    		text-align: center;
+    		line-height: 30px;
+    		float: left;
+    	}
+    	.button button{
+    		margin: 10px 10px;
+    		width: 100px;
+    	}
+    </style>
+  </head>
+  <body>
+  	<!-- 导航条 -->
+  	<nav class="navbar navbar-inverse navbar-fixed-top">
+		  <div class="container">
+		    <div class="navbar-header">
+		      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+		        <span class="sr-only">Toggle navigation</span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		      </button>
+		      <a class="navbar-brand" href="#">影院管理系统</a>
+		    </div>
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		      <ul class="nav navbar-nav">
+		      	<li><a href="/managerIndex.html">首页</a></li>
+		        <li><a href="/MoviehallList.html">影厅信息 </a></li>
+		        <li><a href="/MovieList.html">影片信息</a></li>
+		        <li class="active"><a href="/TicketInformation.html">影票信息 </a></li>
+		        <li><a href="/CheckReport.html">查看汇报</a></li>
+		        <li><a href="/changeCinemaName.html">修改影院</a></li>
+				  <li><a href="/logout">登出</a></li>
+		      </ul>
+		    </div>
+		  </div>
+		</nav>
+	
+	<!-- 影厅列表 -->
+	<div class="container daum_table" align="center">
+		<table width="80%">
+			<h2>影票信息</h2>
+			<tr>
+				<td align="right" width="40%">影片名称：</td>
+				<td><select style="width: 60%;" id="movieName"></select></td>
+			</tr>
+			<tr>
+				<td align="right">影厅名称：</td>
+				<td><select style="width: 60%;" id="screensName"></select></td>
+			</tr>
+			<tr>
+				<td align="right">开始时间：</td>
+				<td><input type="text" style="width: 60%;" id="beginTime"/><span>2019-05-23 07:00:00</span></td>
+			</tr>
+			<tr>
+				<td align="right">结束时间：</td>
+				<td><input type="text" style="width: 60%;" id="endTime"/><span>2019-05-23 07:00:00</span></td>
+			</tr>
+			<tr>
+				<td align="right">电影票价：</td>
+				<td><input type="text" style="width: 60%;" id="price"/></td>
+			</tr>
+		</table>
+	</div>
+	<div class="button" align="center">
+		<button id="btn">确定</button>
+		<button onclick="window.location.href='/managerIndex.html'">取消</button>
+	</div>
+
+	<!-- 底部 -->
+	<nav class="navbar navbar-default navbar-inverse nav-bottom navbar-fixed-bottom">
+        <div class="container" align="center">
+            <ul class="nav nav-tabs nav-tabs-justified">
+                <div class="row" align="center">
+                    <div class="col-md-12 col-sm-12 col-xs-12" align="center"></div>
+                </div>
+            </ul>
+        </div>
+    </nav>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+    	screeningId = GetQueryString("id");
+		// var server = "http://47.106.247.251";
+		var server = "";
+	    if(screeningId != null){
+	    	$(document).ready(function () {
+	    		requestUrl = server + "/Screening/"+screeningId;
+	    		$.ajax({
+		            type:"get",
+		            url: server + "/movie",
+		            dataType:"json",
+		            async:true,
+		            success:function(result){
+		            	console.log(result);
+		            	var movie = "";
+		            	movie += '<option value=""></option>';
+		            	for(var i=0;i<result.data.length;i++){
+		            		(function(i){
+		            			movie += '<option value="'+result.data[i].movieId+'">'+result.data[i].movieName+'</option>';
+		            		})(i);
+		            	}
+		            	$("#movieName").html(movie);
+		            }
+		        });
+		        $.ajax({
+		            type:"get",
+		            url: server + "/Screens",
+		            dataType:"json",
+		            async:true,
+		            success:function(result){
+		            	console.log(result);
+		            	var screens = "";
+		            	screens += '<option value=""></option>';
+		            	for(var j=0;j<result.length;j++){
+		            		(function(j){
+		            			screens += '<option value="'+result[j].screensId+'">'+result[j].screensName+'</option>';
+		            		})(j);
+		            	}
+		            	$("#screensName").html(screens);
+		            }
+		        });
+		        $.ajax({
+		            type:"get",
+		            url: requestUrl,
+		            dataType:"json",
+		            async:true,
+		            success:function(result){
+		            	console.log(result);
+		            	for(var k=0;k<$("#movieName option").length;k++){
+		            		if($("#movieName option")[k].value == result.movie.movieId)
+		            			$("#movieName option")[k].selected = true;
+		            	}
+		            	for(var l=0;l<$("#screensName option").length;l++){
+		            		if($("#screensName option")[l].value == result.screens.screensId)
+		            			$("#screensName option")[l].selected = true;
+		            	}
+		            	document.getElementById('beginTime').value = result.beginTime;
+		            	document.getElementById('endTime').value = result.endTime;
+		            	document.getElementById('price').value = result.price;
+		            }
+		        });
+	    	});
+	    
+	    	 	document.getElementById('btn').onclick = function(){
+			        $.ajax({
+		            type:"post",
+		            url: server + "/Screening/update",
+		            contentType:'application/x-www-form-urlencoded',
+		            dataType:"json",
+		            async:true,
+		            data:{
+		            	"screeningId":screeningId,
+			        		"beginTime":document.getElementById("beginTime").value,
+			        		"endTime":document.getElementById("endTime").value,
+			        		"movieId":document.getElementById("movieName").value,
+			        		"price":document.getElementById("price").value,
+			        		"screensId":document.getElementById("screensName").value
+		            },
+		            success:function(result){
+		            	alert("修改成功");
+		            	window.location.href="/TicketList.html";
+		                console.log(result);
+		            }
+		         });
+		       }
+	    }else{
+	    	$(document).ready(function () {
+	    		requestUrl = server + "/Screening/"+screeningId;
+	    		$.ajax({
+		            type:"get",
+		            url: server + "/movie",
+		            dataType:"json",
+		            async:true,
+		            success:function(result){
+		            	console.log(result);
+		            	var movie = "";
+		            	movie += '<option value=""></option>';
+		            	for(var i=0;i<result.data.length;i++){
+		            		(function(i){
+		            			movie += '<option value="'+result.data[i].movieId+'">'+result.data[i].movieName+'</option>';
+		            		})(i);
+		            	}
+		            	$("#movieName").html(movie);
+		            }
+		        });
+		        $.ajax({
+		            type:"get",
+		            url: server + "/Screens",
+		            dataType:"json",
+		            async:true,
+		            success:function(result){
+		            	console.log(result);
+		            	var screens = "";
+		            	screens += '<option value=""></option>';
+		            	for(var j=0;j<result.length;j++){
+		            		(function(j){
+		            			screens += '<option value="'+result[j].screensId+'">'+result[j].screensName+'</option>';
+		            		})(j);
+		            	}
+		            	$("#screensName").html(screens);
+		            }
+		        });
+		        $.ajax({
+		            type:"get",
+		            url: requestUrl,
+		            dataType:"json",
+		            async:true,
+		            success:function(result){
+		            	console.log(result);
+		            }
+		        });
+	    	});
+	    
+	    	 	document.getElementById('btn').onclick = function(){
+			        $.ajax({
+		            type:"post",
+		            url: server + "/Screening",
+		            contentType:'application/x-www-form-urlencoded',
+		            dataType:"json",
+		            async:true,
+		            data:{
+			        		"beginTime":document.getElementById("beginTime").value,
+			        		"endTime":document.getElementById("endTime").value,
+			        		"movieId":document.getElementById("movieName").value,
+			        		"price":document.getElementById("price").value,
+			        		"screensId":document.getElementById("screensName").value
+		            },
+		            success:function(result){
+		            	alert("添加成功");
+						window.location.href="/TicketList.html";
+		                console.log(result);
+		            }
+		         });
+		       }
+	    }
+	    	/**
+				 * url参数获取函数
+				 * @param name
+				 * @returns {null}
+				 * @constructor
+				 */
+					function GetQueryString(name)
+					{
+					    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+					    var r = window.location.search.substr(1).match(reg);
+					    if(r!=null)return  unescape(r[2]); return null;
+					}
+    </script>
+  </body>
+</html>

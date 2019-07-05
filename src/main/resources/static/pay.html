@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>pay</title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+      <script src="js/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+    	.daum-QRcode{
+    		margin-top: 100px;
+    	}
+    	.daum_btn{
+    		margin: 0 10px;
+    	}
+    </style>
+  </head>
+  <body>
+  	<!-- 导航条 -->
+  	<nav class="navbar navbar-inverse navbar-fixed-top">
+	  <div class="container">
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+	        <span class="sr-only">Toggle navigation</span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	      <a class="navbar-brand" href="#">影院管理系统</a>
+	    </div>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	      <ul class="nav navbar-nav">
+	        <li><a href="/userIndex.html">首页 <span class="sr-only">(current)</span></a></li>
+	        <li class="active"><a href="#">购票</a></li>
+	        <li><a href="/report.html">我想看</a></li>
+	        <li><a href="/Order.html">我的订单</a></li>
+			  <li><a href="/logout">登出</a></li>
+	      </ul>
+	    </div>
+	</nav>
+	
+	<!-- 扫码付款 -->
+	<div class="container daum-QRcode">
+		<div class="row">
+			<div class="col-xs-6 col-xs-offset-3 col-md-4 col-md-offset-4" align="center">
+				<a href="#" class="thumbnail daum-thumbnail">
+			      <img src="img/film7.jpg" class="img-responsive center-block" width="100%">
+			    </a>
+			    <button type="button" class="btn btn-success daum_btn" onclick="window.location.href='/payResult.html?id=1'">支付成功</button>
+			    <button type="button" class="btn btn-success daum_btn" onclick="window.location.href='/payResult.html?id=0'">支付失败</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- 底部 -->
+	<nav class="navbar navbar-default navbar-inverse nav-bottom navbar-fixed-bottom">
+        <div class="container" align="center">
+            <ul class="nav nav-tabs nav-tabs-justified">
+                <div class="row" align="center">
+                    <div class="col-md-12 col-sm-12 col-xs-12" align="center"></div>
+                </div>
+            </ul>
+        </div>
+    </nav>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>
